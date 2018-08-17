@@ -1,16 +1,49 @@
 package com.example.bakinapp.recipe_list;
 
-public class RecipeContract {
+import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 
-    interface ModelInteractor{
+import java.util.List;
 
+public interface RecipeContract {
+
+    interface ModelInteractor {
+        void fetchRecipes(CallBack callBack);
+
+        void setRecipesEntityList(List<RecipeEntity> recipesEntityList);
+
+        List<RecipeEntity> getRecipesEntityList();
+
+        List<RecipeEntity> getAdapterEntityList();
 
     }
 
-    interface View{
+    interface View {
+
+        void showProgress(Boolean show);
+
+        void showRecipeList(Boolean show);
+
+        void showRecipeDetails(RecipeEntity recipeEntity);
+
+        void notifyRecipeData();
+
+        void showOfflineMsg(boolean b);
 
     }
-    interface Presenter{
 
+    interface Presenter {
+
+        void getRecipes();
+
+        void recipeClicked(int position);
+
+        RecipeEntity getAdapterEntity(int position);
+
+    }
+
+    interface CallBack {
+        void onSuccess();
+
+        void onFailure();
     }
 }

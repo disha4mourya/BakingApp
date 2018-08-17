@@ -1,4 +1,8 @@
 package com.example.bakinapp.utils.mvp;
 
-public class LoadCallback {
+public interface LoadCallback<T> {
+
+    void onSuccess(T response);
+
+    void onFailure(Throwable throwable);
 }
