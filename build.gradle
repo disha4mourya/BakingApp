@@ -2,18 +2,45 @@
 
 buildscript {
 
-    ext.versions=[
-            'minSdk':16,
-            'compileSdk':27,
-            'buildTools':'27.1.1'
+    ext.versions = [
+            'minSdk'           : 16,
+            'compileSdk'       : 27,
+            'buildTools'       : '27.0.1',
+            'buildToolsMain'   : '27.0.3',
+            'androidPlugin'    : '3.1.3',
+            'retrofit'         : '2.4.0',
+            'constraintVersion': '1.1.2'
+    ]
+
+    ext.deps = [
+            android: [
+                    'gradlePlugin': "com.android.tools.build:gradle:${versions.androidPlugin}"
+            ],
+            support: [
+                    'appCompat'    : "com.android.support:appcompat-v7:${versions.buildTools}",
+                    'supportDesign': "com.android.support:design:${versions.buildTools}",
+                    'annotations'  : "com.android.support:support-annotations:${versions.buildTools}",
+                    'recyclerView' : "com.android.support:recyclerview-v7:${versions.buildTools}",
+                    'cardview'     : "com.android.support:cardview-v7:${versions.buildTools}",
+                    'constraint'   : "com.android.support.constraint:constraint-layout:${versions.constraintVersion}"
+            ],
+            square : [
+                    'retrofit'     : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+                    'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+                    'okhttp'       : "com.squareup.okhttp3:okhttp:3.9.0",
+            ],
+            test   : [
+                    'junit'       : "junit:junit:4.12",
+                    'testRunner'  : "com.android.support.test:runner:1.0.1",
+                    'expressoCore': "com.android.support.test.espresso:espresso-core:3.0.1"
+            ]
     ]
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
-        
+        classpath deps.android.gradlePlugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
