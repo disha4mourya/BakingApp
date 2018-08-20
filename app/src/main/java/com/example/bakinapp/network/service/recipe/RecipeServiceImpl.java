@@ -3,6 +3,8 @@ package com.example.bakinapp.network.service.recipe;
 import com.example.bakinapp.network.RetrofitBuilder;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,11 +19,11 @@ public class RecipeServiceImpl {
 
     public void fetchRecipes(final FetchRecipeCallBack callBack) {
 
-        final Call<RecipeEntity> call = recipeService.getRecipesLIst();
+        final Call<List<RecipeEntity>> call = recipeService.getRecipesLIst();
 
-        call.enqueue(new Callback<RecipeEntity>() {
+        call.enqueue(new Callback<List<RecipeEntity>>() {
             @Override
-            public void onResponse(Call<RecipeEntity> call, Response<RecipeEntity> response) {
+            public void onResponse(Call<List<RecipeEntity>> call, Response<List<RecipeEntity>> response) {
                 if (response.isSuccessful()) {
                     callBack.onSuccess(response.body());
                 } else {
@@ -30,7 +32,7 @@ public class RecipeServiceImpl {
             }
 
             @Override
-            public void onFailure(Call<RecipeEntity> call, Throwable t) {
+            public void onFailure(Call<List<RecipeEntity>> call, Throwable t) {
 
                 callBack.onFailure();
             }
@@ -39,7 +41,7 @@ public class RecipeServiceImpl {
     }
 
     public interface FetchRecipeCallBack {
-        void onSuccess(RecipeEntity recipeEntity);
+        void onSuccess(List<RecipeEntity> recipeEntity);
 
         void onFailure();
     }

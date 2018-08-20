@@ -39,6 +39,9 @@ public interface RecipeContract {
 
         RecipeEntity getAdapterEntity(int position);
 
+        int getAdapterEntityCount();
+
+        void create();
     }
 
     interface CallBack {
