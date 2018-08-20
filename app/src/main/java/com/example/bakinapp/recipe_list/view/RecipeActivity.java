@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.bakinapp.RecipeDetails.RecipeDetailsActivity;
+import com.example.bakinapp.RecipeDetails.view.RecipeDetailsActivity;
 import com.example.bakinapp.recipe_list.RecipeContract;
 import com.example.bakinapp.recipe_list.RecipePresenter;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;

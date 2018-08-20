@@ -1,4 +1,4 @@
-package com.example.bakinapp.RecipeDetails.fragment;
+package com.example.bakinapp.RecipeDetails.view.fragment;
 
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;

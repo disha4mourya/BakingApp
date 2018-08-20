@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.bakinapp.RecipeDetails.RecipeDetailsActivity"></activity>
+        <activity android:name="com.example.bakinapp.RecipeDetails.view.RecipeDetailsActivity"></activity>
     </application>
 
 </manifest>
