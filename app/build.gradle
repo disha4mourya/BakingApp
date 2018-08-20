@@ -35,6 +35,10 @@ dependencies {
     implementation deps.square.gsonConverter
     implementation deps.square.okhttp
 
+    implementation deps.exoPlayer.core
+    implementation deps.exoPlayer.dash
+    implementation deps.exoPlayer.ui
+
     testImplementation deps.test.junit
     androidTestImplementation deps.test.testRunner
     androidTestImplementation deps.test.expressoCore
