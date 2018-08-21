@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bakinapp.recipe_list.entities.StepsEntity;
@@ -23,8 +25,10 @@ import com.imerchantech.bakinapp.R;
 import java.util.List;
 
 import static android.view.View.VISIBLE;
+import static com.example.bakinapp.network.Constants.SELECTEDENTITY;
+import static com.example.bakinapp.network.Constants.STEPSENTITY;
 
-public class StepDetailsActivity extends AppCompatActivity {
+public class StepDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     StepsEntity stepsEntity;
     int selectedPosition = 0;
@@ -39,6 +43,8 @@ public class StepDetailsActivity extends AppCompatActivity {
 
     List<StepsEntity> stepsEntityList;
 
+    ImageButton ibPrev, ibNext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,20 @@ public class StepDetailsActivity extends AppCompatActivity {
         playerView = findViewById(R.id.video_view);
         tvDescription = findViewById(R.id.tvDescription);
 
+        ibPrev = findViewById(R.id.ibPrev);
+        ibNext = findViewById(R.id.ibNext);
+
+        ibPrev.setOnClickListener(this);
+        ibNext.setOnClickListener(this);
+
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        stepsEntityList = bundle.getParcelableArrayList(STEPSENTITY);
+        selectedPosition = bundle.getInt(SELECTEDENTITY);
+        Log.d("stepsListSize", "" + stepsEntityList.size());
+        Log.d("selectedPosition", "" + selectedPosition);
+
+        setVisibilityOfImageButton();
     }
 
     @Override
@@ -66,6 +86,8 @@ public class StepDetailsActivity extends AppCompatActivity {
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
+
+        setStepData(selectedPosition);
     }
 
     @Override
@@ -175,5 +197,38 @@ public class StepDetailsActivity extends AppCompatActivity {
             tvDescription.setText(description);
         } else
             showDescription(false);
+    }
+
+    public void setVisibilityOfImageButton() {
+        if (selectedPosition == 0)
+            ibPrev.setVisibility(View.GONE);
+        else
+            ibPrev.setVisibility(VISIBLE);
+
+        if (selectedPosition == stepsEntityList.size() - 1)
+            ibNext.setVisibility(View.GONE);
+        else
+            ibNext.setVisibility(VISIBLE);
+
+        Log.d("selectedPositionIn",""+selectedPosition);
+        Log.d("sizeList",""+stepsEntityList.size());
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.ibPrev:
+                selectedPosition = selectedPosition - 1;
+                setStepData(selectedPosition);
+                setVisibilityOfImageButton();
+                break;
+            case R.id.ibNext:
+                selectedPosition = selectedPosition + 1;
+                setStepData(selectedPosition);
+                setVisibilityOfImageButton();
+
+                break;
+        }
     }
 }

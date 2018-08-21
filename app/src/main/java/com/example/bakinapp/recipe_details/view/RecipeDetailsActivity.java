@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import com.google.gson.Gson;
 import com.imerchantech.bakinapp.R;
 import com.imerchantech.bakinapp.databinding.ActivityRecipeDetailsBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.VISIBLE;
@@ -41,7 +43,6 @@ import static com.example.bakinapp.network.Constants.STEPSENTITY;
 public class RecipeDetailsActivity extends AppCompatActivity implements onStepClickListener {
 
     private SimpleExoPlayer player;
-
     private long playbackPosition;
     private int currentWindow;
     private boolean playWhenReady = true;
@@ -70,6 +71,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
         fragmentManager = getSupportFragmentManager();
         fetchIntentData();
     }
+
 
     private void fetchIntentData() {
 
@@ -174,10 +176,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
     public void stepClicked(int position) {
         if (!isTwoPane) {
             Intent intent = new Intent(this, StepDetailsActivity.class);
-           /* Bundle bundle=new Bundle();
-            bundle.putParcelable(STEPSENTITY);*/
-            intent.putExtra(STEPSENTITY, new Gson().toJson(stepsEntityList.get(position)));
-            intent.putExtra(SELECTEDENTITY, position);
+            Bundle bundle=new Bundle();
+            bundle.putParcelableArrayList(STEPSENTITY, (ArrayList<? extends Parcelable>) stepsEntityList);
+           // intent.putExtra(STEPSENTITY, new Gson().toJson(stepsEntityList.get(position)));
+            bundle.putInt(SELECTEDENTITY, position);
+            intent.putExtras(bundle);
             startActivity(intent);
         } else {
             //selectedPosition = position;
