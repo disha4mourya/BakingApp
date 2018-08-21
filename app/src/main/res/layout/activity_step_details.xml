@@ -6,4 +6,22 @@
     android:layout_height="match_parent"
     tools:context="com.example.bakinapp.step_details.StepDetailsActivity">
 
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/video_view"
+        android:id="@+id/tvDescriptionDummy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Description"/>
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionDummy"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </android.support.constraint.ConstraintLayout>

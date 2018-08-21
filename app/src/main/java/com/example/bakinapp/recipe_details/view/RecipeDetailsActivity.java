@@ -174,6 +174,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
     public void stepClicked(int position) {
         if (!isTwoPane) {
             Intent intent = new Intent(this, StepDetailsActivity.class);
+           /* Bundle bundle=new Bundle();
+            bundle.putParcelable(STEPSENTITY);*/
             intent.putExtra(STEPSENTITY, new Gson().toJson(stepsEntityList.get(position)));
             intent.putExtra(SELECTEDENTITY, position);
             startActivity(intent);
