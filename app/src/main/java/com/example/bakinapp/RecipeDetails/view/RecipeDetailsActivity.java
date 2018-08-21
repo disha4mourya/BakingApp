@@ -1,12 +1,18 @@
 package com.example.bakinapp.RecipeDetails.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.example.bakinapp.RecipeDetails.RecipeDetailsContract;
+import com.example.bakinapp.RecipeDetails.RecipeDetailsModelInteractor;
+import com.example.bakinapp.RecipeDetails.RecipeDetailsPresenter;
+import com.example.bakinapp.RecipeDetails.view.fragment.MasterListFragment;
+import com.example.bakinapp.recipe_list.entities.IngredientsEntity;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 import com.example.bakinapp.recipe_list.entities.StepsEntity;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -26,7 +32,7 @@ import java.util.List;
 
 import static com.example.bakinapp.network.Constants.RECIPEENTITY;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsContract.View {
 
     private SimpleExoPlayer player;
     private PlayerView playerView;
@@ -34,26 +40,53 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private long playbackPosition;
     private int currentWindow;
     private boolean playWhenReady = true;
-    RecipeEntity recipeEntity;
+    static RecipeEntity recipeEntity;
     Boolean isTwoPane = false;
+    RecipeDetailsPresenter presenter;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        fetchIntentData();
+        context = this;
         if (findViewById(R.id.video_view) != null) {
             isTwoPane = true;
             playerView = findViewById(R.id.video_view);
         } else {
             isTwoPane = false;
         }
+
+        presenter = new RecipeDetailsPresenter(this, this);
+        fetchIntentData();
+
+    }
+
+    public static RecipeEntity getRecipeEntity() {
+        return recipeEntity;
+    }
+
+    public void setRecipeEntity(RecipeEntity recipeEntity) {
+        this.recipeEntity = recipeEntity;
+    }
+
+    public String getRecipeEntityDetail() {
+        return new Gson().toJson(recipeEntity);
     }
 
     private void fetchIntentData() {
 
         recipeEntity = new Gson().fromJson(getIntent().getStringExtra(RECIPEENTITY), RecipeEntity.class);
+
+        Log.d("ingre", "size" + recipeEntity.getIngredients().size());
+        Log.d("ingre", "name" + recipeEntity.getIngredients().get(0).getIngredient());
+        presenter.createCalled(recipeEntity);
+
+       /* Bundle bundle = new Bundle();
+        bundle.putString(RECIPEENTITY, new Gson().toJson(recipeEntity));
+        MasterListFragment fragobj = new MasterListFragment();
+        fragobj.setArguments(bundle);*/
     }
 
     @Override
@@ -138,4 +171,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+
+    @Override
+    public void showStepsDetails(StepsEntity stepsEntity) {
+
+    }
+
+    @Override
+    public void showStepsDetailsOnNextScreen(List<StepsEntity> stepsEntities) {
+
+    }
 }

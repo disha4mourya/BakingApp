@@ -10,18 +10,21 @@ public interface RecipeDetailsContract {
 
     interface View {
 
-        void showIngredientsList(List<IngredientsEntity> ingredientsEntity);
-
-        void showStepsList(List<StepsEntity> stepsEntity);
 
         void showStepsDetails(StepsEntity stepsEntity);
 
         void showStepsDetailsOnNextScreen(List<StepsEntity> stepsEntities);
     }
 
+    interface  FragmentView{
+        void showIngredientsList(List<IngredientsEntity> ingredientsEntity);
+
+        void showStepsList(List<StepsEntity> stepsEntity);
+
+    }
     interface ModelInteractor {
 
-        void setRecipeEntityList(List<RecipeEntity> recipeEntityList);
+        void setRecipeEntityList(RecipeEntity recipeEntityList);
 
         void setIngredientsEntityList(List<IngredientsEntity> ingredientsEntityList);
 
@@ -34,7 +37,7 @@ public interface RecipeDetailsContract {
 
     interface Presenter {
 
-        void createCalled(List<RecipeEntity> recipeEntityList);
+        void createCalled(RecipeEntity recipeEntityList);
 
         void stepsClicked(int position);
 

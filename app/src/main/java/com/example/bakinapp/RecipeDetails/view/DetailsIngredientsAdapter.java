@@ -8,58 +8,61 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bakinapp.RecipeDetails.RecipeDetailsContract;
 import com.example.bakinapp.recipe_list.RecipeContract;
+import com.example.bakinapp.recipe_list.entities.IngredientsEntity;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 import com.imerchantech.bakinapp.R;
+import com.imerchantech.bakinapp.databinding.IngredientRowBinding;
 import com.imerchantech.bakinapp.databinding.RecipeRowBinding;
+
+import java.util.List;
 
 public class DetailsIngredientsAdapter extends RecyclerView.Adapter<DetailsIngredientsAdapter.MatchViewHolder> {
 
     private Context context;
-    private RecipeContract.Presenter presenter;
+    //private RecipeDetailsContract.Presenter presenter;
+    List<IngredientsEntity> ingredientsEntity;
 
-    DetailsIngredientsAdapter(Context context, RecipeContract.Presenter presenter) {
+   /* public DetailsIngredientsAdapter(Context context, RecipeDetailsContract.Presenter presenter) {
         this.context = context;
         this.presenter = presenter;
+    }*/
+
+    public DetailsIngredientsAdapter(Context context, List<IngredientsEntity> ingredientsEntity) {
+        this.context = context;
+        this.ingredientsEntity = ingredientsEntity;
     }
 
     @Override
     public DetailsIngredientsAdapter.MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecipeRowBinding binding = DataBindingUtil.inflate(
+        IngredientRowBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.recipe_row, parent, false);
+                R.layout.ingredient_row, parent, false);
         return new DetailsIngredientsAdapter.MatchViewHolder(binding);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final DetailsIngredientsAdapter.MatchViewHolder holder, int position) {
-        RecipeEntity recipeEntity = presenter.getAdapterEntity(position);
+        IngredientsEntity ingredientEntity = ingredientsEntity.get(position);
 
-        holder.binding.tvRecipeName.setText(recipeEntity.getName());
+        holder.binding.tvIngredientName.setText(ingredientEntity.getIngredient());
     }
 
     @Override
     public int getItemCount() {
-        return presenter.getAdapterEntityCount();
+        return ingredientsEntity.size();
+        // return presenter.getIngredientsEntityCount();
     }
 
     class MatchViewHolder extends RecyclerView.ViewHolder {
 
-        private RecipeRowBinding binding;
+        private IngredientRowBinding binding;
 
-        private MatchViewHolder(RecipeRowBinding matchRowBinding) {
+        private MatchViewHolder(IngredientRowBinding matchRowBinding) {
             super(matchRowBinding.getRoot());
             this.binding = matchRowBinding;
 
-            binding.cvRecipe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position >= 0)
-                        presenter.recipeClicked(position);
-                }
-            });
         }
     }
 }

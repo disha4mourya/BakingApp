@@ -8,56 +8,58 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bakinapp.RecipeDetails.RecipeDetailsContract;
 import com.example.bakinapp.recipe_list.RecipeContract;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
+import com.example.bakinapp.recipe_list.entities.StepsEntity;
 import com.imerchantech.bakinapp.R;
 import com.imerchantech.bakinapp.databinding.RecipeRowBinding;
+import com.imerchantech.bakinapp.databinding.StepRowBinding;
 
 public class DetailsStepsAdapter extends RecyclerView.Adapter<DetailsStepsAdapter.MatchViewHolder> {
 
     private Context context;
-    private RecipeContract.Presenter presenter;
+    private RecipeDetailsContract.Presenter presenter;
 
-    DetailsStepsAdapter(Context context, RecipeContract.Presenter presenter) {
+    public DetailsStepsAdapter(Context context, RecipeDetailsContract.Presenter presenter) {
         this.context = context;
         this.presenter = presenter;
     }
 
     @Override
     public DetailsStepsAdapter.MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecipeRowBinding binding = DataBindingUtil.inflate(
+        StepRowBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.recipe_row, parent, false);
+                R.layout.step_row, parent, false);
         return new DetailsStepsAdapter.MatchViewHolder(binding);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final DetailsStepsAdapter.MatchViewHolder holder, int position) {
-        RecipeEntity recipeEntity = presenter.getAdapterEntity(position);
+        StepsEntity recipeEntity = presenter.getStepAdapterEntity(position);
 
-        holder.binding.tvRecipeName.setText(recipeEntity.getName());
+        holder.binding.tvStepName.setText(recipeEntity.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return presenter.getAdapterEntityCount();
+        return presenter.getStepsEntityCount();
     }
 
     class MatchViewHolder extends RecyclerView.ViewHolder {
 
-        private RecipeRowBinding binding;
+        private StepRowBinding binding;
 
-        private MatchViewHolder(RecipeRowBinding matchRowBinding) {
+        private MatchViewHolder(StepRowBinding matchRowBinding) {
             super(matchRowBinding.getRoot());
             this.binding = matchRowBinding;
 
-            binding.cvRecipe.setOnClickListener(new View.OnClickListener() {
+            binding.cvStep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (position >= 0)
-                        presenter.recipeClicked(position);
+                        presenter.stepsClicked(position);
                 }
             });
         }
