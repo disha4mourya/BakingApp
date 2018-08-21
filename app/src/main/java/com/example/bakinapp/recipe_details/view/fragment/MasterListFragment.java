@@ -1,4 +1,4 @@
-package com.example.bakinapp.RecipeDetails.view.fragment;
+package com.example.bakinapp.recipe_details.view.fragment;
 
 
 import android.annotation.SuppressLint;
@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.bakinapp.RecipeDetails.view.DetailsIngredientsAdapter;
-import com.example.bakinapp.RecipeDetails.view.DetailsStepsAdapter;
+import com.example.bakinapp.recipe_details.view.DetailsIngredientsAdapter;
+import com.example.bakinapp.recipe_details.view.DetailsStepsAdapter;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 import com.example.bakinapp.utils.onStepClickListener;
 import com.google.gson.Gson;

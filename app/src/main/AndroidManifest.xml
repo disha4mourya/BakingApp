@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.bakinapp.RecipeDetails.view.RecipeDetailsActivity" />
-        <activity android:name="com.example.bakinapp.step_details.StepDetailsActivity"></activity>
+        <activity android:name="com.example.bakinapp.recipe_details.view.RecipeDetailsActivity" />
+        <activity android:theme="@style/AppThemeNoActionBar" android:name="com.example.bakinapp.step_details.StepDetailsActivity"/>
     </application>
 
 </manifest>

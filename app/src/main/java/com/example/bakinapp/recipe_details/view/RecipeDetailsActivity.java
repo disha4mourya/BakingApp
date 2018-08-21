@@ -1,4 +1,4 @@
-package com.example.bakinapp.RecipeDetails.view;
+package com.example.bakinapp.recipe_details.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,11 +9,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.bakinapp.RecipeDetails.view.fragment.MasterListFragment;
+import com.example.bakinapp.recipe_details.view.fragment.MasterListFragment;
 import com.example.bakinapp.recipe_list.entities.IngredientsEntity;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 import com.example.bakinapp.recipe_list.entities.StepsEntity;
@@ -34,6 +33,7 @@ import com.imerchantech.bakinapp.databinding.ActivityRecipeDetailsBinding;
 
 import java.util.List;
 
+import static android.view.View.VISIBLE;
 import static com.example.bakinapp.network.Constants.RECIPEENTITY;
 import static com.example.bakinapp.network.Constants.SELECTEDENTITY;
 import static com.example.bakinapp.network.Constants.STEPSENTITY;
@@ -52,6 +52,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
     Context context;
     ActivityRecipeDetailsBinding binding;
     FragmentManager fragmentManager;
+    int selectedPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
 
         fragmentManager = getSupportFragmentManager();
         fetchIntentData();
-
     }
 
     private void fetchIntentData() {
@@ -97,11 +97,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
     @Override
     public void onResume() {
         super.onResume();
-        if (isTwoPane)
+        if (isTwoPane) {
             hideSystemUi();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            if (isTwoPane)
+            if ((Util.SDK_INT <= 23 || player == null)) {
                 initializePlayer();
+            }
+            setStepData(selectedPosition);
         }
     }
 
@@ -134,10 +135,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
 
         }
 
-        List<StepsEntity> stepsEntityList = recipeEntity.getSteps();
-        Log.d("videoToBePlayed", "is:=" + stepsEntityList.get(0).getVideoURL());
-        MediaSource mediaSource = buildMediaSource(Uri.parse(stepsEntityList.get(0).getVideoURL()));
-        player.prepare(mediaSource, true, false);
+      /*  if (stepsEntityList.get(0).getVideoURL() != null && !stepsEntityList.get(0).getVideoURL().equals("")) {
+            setUrlToPlay(stepsEntityList.get(0).getVideoURL());
+        } else
+            showVideoView(false);*/
+
+
     }
 
     private void releasePlayer() {
@@ -169,9 +172,59 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
 
     @Override
     public void stepClicked(int position) {
-        Intent intent = new Intent(this, StepDetailsActivity.class);
-        intent.putExtra(STEPSENTITY, new Gson().toJson(stepsEntityList.get(position)));
-        intent.putExtra(SELECTEDENTITY, position);
-        startActivity(intent);
+        if (!isTwoPane) {
+            Intent intent = new Intent(this, StepDetailsActivity.class);
+            intent.putExtra(STEPSENTITY, new Gson().toJson(stepsEntityList.get(position)));
+            intent.putExtra(SELECTEDENTITY, position);
+            startActivity(intent);
+        } else {
+            //selectedPosition = position;
+            setStepData(position);
+        }
+    }
+
+    public void setUrlToPlay(String urlToPlay) {
+        showVideoView(true);
+        MediaSource mediaSource = buildMediaSource(Uri.parse(urlToPlay));
+        player.prepare(mediaSource, true, false);
+    }
+
+    public void showVideoView(Boolean show) {
+        binding.videoView.setVisibility(show ? VISIBLE : View.GONE);
+    }
+
+    public void showDescription(Boolean show) {
+        binding.tvDescription.setVisibility(show ? VISIBLE : View.GONE);
+
+       /* if (!show) {
+            binding.videoView.setLayoutParams(
+                    new ViewGroup.LayoutParams(
+                            // or ViewGroup.LayoutParams.WRAP_CONTENT
+                            0,
+                            // or ViewGroup.LayoutParams.WRAP_CONTENT,
+                            0));
+        } else {
+            binding.videoView.setLayoutParams(
+                    new ViewGroup.LayoutParams(
+                            // or ViewGroup.LayoutParams.WRAP_CONTENT
+                            0,
+                            // or ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+        }*/
+    }
+
+    public void setStepData(int selectedPosition) {
+        String videoUrl = stepsEntityList.get(selectedPosition).getVideoURL();
+        String description = stepsEntityList.get(selectedPosition).getDescription();
+        if (videoUrl != null && !videoUrl.equals("")) {
+            setUrlToPlay(videoUrl);
+        } else {
+            showVideoView(false);
+        }
+        if (description != null && !description.equals("")) {
+            showDescription(true);
+            binding.tvDescription.setText(description);
+        } else
+            showDescription(false);
     }
 }

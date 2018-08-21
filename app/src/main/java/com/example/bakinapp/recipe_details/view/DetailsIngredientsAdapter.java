@@ -1,4 +1,4 @@
-package com.example.bakinapp.RecipeDetails.view;
+package com.example.bakinapp.recipe_details.view;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
