@@ -1,40 +1,44 @@
 package com.example.bakinapp.RecipeDetails.view.fragment;
 
-import android.app.Fragment;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.bakinapp.RecipeDetails.RecipeDetailsContract;
-import com.example.bakinapp.RecipeDetails.RecipeDetailsPresenter;
 import com.example.bakinapp.RecipeDetails.view.DetailsIngredientsAdapter;
 import com.example.bakinapp.RecipeDetails.view.DetailsStepsAdapter;
-import com.example.bakinapp.RecipeDetails.view.RecipeDetailsActivity;
-import com.example.bakinapp.recipe_list.entities.IngredientsEntity;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
-import com.example.bakinapp.recipe_list.entities.StepsEntity;
+import com.example.bakinapp.utils.onStepClickListener;
 import com.google.gson.Gson;
 import com.imerchantech.bakinapp.R;
 import com.imerchantech.bakinapp.databinding.FragmentMasterListBinding;
 
-import java.util.List;
-
 import static com.example.bakinapp.network.Constants.RECIPEENTITY;
 
-public class MasterListFragment extends Fragment implements RecipeDetailsContract.FragmentView {
+public class MasterListFragment extends Fragment {
 
     FragmentMasterListBinding binding;
     DetailsIngredientsAdapter ingredientsAdapter;
     DetailsStepsAdapter stepsAdapter;
     Context context;
-    RecipeDetailsPresenter presenter;
-    RecipeEntity recipeEntity=new RecipeEntity();
+    RecipeEntity recipeEntity = new RecipeEntity();
+    onStepClickListener onStepClickListener;
+
+    public MasterListFragment(){
+
+    }
+    @SuppressLint("ValidFragment")
+    public MasterListFragment(onStepClickListener onStepClickListener1) {
+        this.onStepClickListener=onStepClickListener1;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -43,40 +47,25 @@ public class MasterListFragment extends Fragment implements RecipeDetailsContrac
         View view = binding.getRoot();
         context = getActivity();
 
-
-        recipeEntity=RecipeDetailsActivity.getRecipeEntity();
-       /* Log.d("ingreFrag", "size" + recipeEntity.getIngredients().size());
-
+        assert getArguments() != null;
+        String getArguments = getArguments().getString(RECIPEENTITY);
+        recipeEntity = new Gson().fromJson(getArguments, RecipeEntity.class);
+        Log.d("ingreFrag", "size" + recipeEntity.getIngredients().size());
 
         ingredientsAdapter = new DetailsIngredientsAdapter(context, recipeEntity.getIngredients());
-        stepsAdapter = new DetailsStepsAdapter(context, presenter);
+        stepsAdapter = new DetailsStepsAdapter(context, recipeEntity.getSteps());
 
+        stepsAdapter.setClickListener(onStepClickListener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(context);
         binding.rvIngredients.setLayoutManager(linearLayoutManager);
+
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(context);
         binding.rvSteps.setLayoutManager(linearLayoutManager2);
 
         binding.rvIngredients.setAdapter(ingredientsAdapter);
         binding.rvSteps.setAdapter(stepsAdapter);
 
-        stepsAdapter.notifyDataSetChanged();
-        ingredientsAdapter.notifyDataSetChanged();*/
-       // recipeEntity = new Gson().fromJson(activity.getRecipeEntityDetail(), RecipeEntity.class);
-       // recipeEntity = new Gson().fromJson(activity.getRecipeEntityDetail(), RecipeEntity.class);
         return view;
     }
-
-    @Override
-    public void showIngredientsList(List<IngredientsEntity> ingredientsEntity) {
-        if (ingredientsAdapter != null)
-            ingredientsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showStepsList(List<StepsEntity> stepsEntity) {
-        if (stepsAdapter != null)
-            stepsAdapter.notifyDataSetChanged();
-    }
-
 
 }

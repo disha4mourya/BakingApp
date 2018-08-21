@@ -39,6 +39,7 @@ dependencies {
     implementation deps.exoPlayer.dash
     implementation deps.exoPlayer.ui
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation deps.test.junit
     androidTestImplementation deps.test.testRunner
     androidTestImplementation deps.test.expressoCore

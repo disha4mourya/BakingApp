@@ -1,20 +1,14 @@
 package com.example.bakinapp.RecipeDetails.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.bakinapp.RecipeDetails.RecipeDetailsContract;
-import com.example.bakinapp.recipe_list.RecipeContract;
 import com.example.bakinapp.recipe_list.entities.IngredientsEntity;
-import com.example.bakinapp.recipe_list.entities.RecipeEntity;
 import com.imerchantech.bakinapp.R;
 import com.imerchantech.bakinapp.databinding.IngredientRowBinding;
-import com.imerchantech.bakinapp.databinding.RecipeRowBinding;
 
 import java.util.List;
 
