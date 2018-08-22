@@ -5,4 +5,5 @@ public class Constants {
     public static String RECIPEENTITY="recipeEntity";
     public static String STEPSENTITY="stepsEntity";
     public static String SELECTEDENTITY="selectedEntity";
+    public static String ALLRECIPEENTITY="allRecipeEntity";
 }

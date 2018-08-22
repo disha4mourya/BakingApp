@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="com.example.bakinapp.app.BakingApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +21,21 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.bakinapp.recipe_details.view.RecipeDetailsActivity" />
-        <activity android:theme="@style/AppThemeNoActionBar" android:name="com.example.bakinapp.step_details.StepDetailsActivity"/>
+        <activity
+            android:name="com.example.bakinapp.step_details.StepDetailsActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+
+        <service android:name="com.example.bakinapp.RecipeAppWidgetService" />
+
+        <receiver android:name="com.example.bakinapp.RecipeAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

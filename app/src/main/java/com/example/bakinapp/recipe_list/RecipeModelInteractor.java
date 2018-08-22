@@ -3,9 +3,14 @@ package com.example.bakinapp.recipe_list;
 import android.app.Activity;
 
 import com.example.bakinapp.network.service.recipe.RecipeServiceImpl;
+import com.example.bakinapp.recipe_list.entities.AllRecipeEntity;
 import com.example.bakinapp.recipe_list.entities.RecipeEntity;
+import com.google.gson.Gson;
 
 import java.util.List;
+
+import static com.example.bakinapp.app.BakingApp.editor;
+import static com.example.bakinapp.network.Constants.ALLRECIPEENTITY;
 
 public class RecipeModelInteractor implements RecipeContract.ModelInteractor {
 
@@ -27,6 +32,14 @@ public class RecipeModelInteractor implements RecipeContract.ModelInteractor {
             public void onSuccess(List<RecipeEntity> recipeEntity) {
 
                 recipeEntityList = recipeEntity;
+
+                AllRecipeEntity allRecipeEntity = new AllRecipeEntity();
+                allRecipeEntity.setRecipeEntityList(recipeEntityList);
+
+                String allRecipes = new Gson().toJson(allRecipeEntity);
+                editor.putString(ALLRECIPEENTITY, allRecipes);
+                editor.commit();
+
                 callBack.onSuccess();
             }
 

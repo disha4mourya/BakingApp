@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -79,13 +79,13 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         // Checking the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //First Hide other objects (listview or recyclerview), better hide them using Gone.
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) playerView.getLayoutParams();
+            ViewGroup.LayoutParams params =  playerView.getLayoutParams();
             params.width=params.MATCH_PARENT;
             params.height=params.MATCH_PARENT;
             playerView.setLayoutParams(params);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             //unhide your objects here.
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) playerView.getLayoutParams();
+            ViewGroup.LayoutParams params =  playerView.getLayoutParams();
             params.width=params.MATCH_PARENT;
             params.height=600;
             playerView.setLayoutParams(params);
