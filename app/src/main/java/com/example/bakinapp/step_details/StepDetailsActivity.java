@@ -1,11 +1,14 @@
 package com.example.bakinapp.step_details;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -70,6 +73,25 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checking the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //First Hide other objects (listview or recyclerview), better hide them using Gone.
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) playerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=params.MATCH_PARENT;
+            playerView.setLayoutParams(params);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            //unhide your objects here.
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) playerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=600;
+            playerView.setLayoutParams(params);
+        }
+    }
+    @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
@@ -117,6 +139,9 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
             player.setPlayWhenReady(playWhenReady);
             player.seekTo(currentWindow, playbackPosition);
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            }
         }
 
       /*  if (stepsEntityList.get(0).getVideoURL() != null && !stepsEntityList.get(0).getVideoURL().equals("")) {
@@ -190,6 +215,9 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         if (videoUrl != null && !videoUrl.equals("")) {
             setUrlToPlay(videoUrl);
         } else {
+            if(getSupportActionBar()!=null) {
+                getSupportActionBar().hide();
+            }
             showVideoView(false);
         }
         if (description != null && !description.equals("")) {

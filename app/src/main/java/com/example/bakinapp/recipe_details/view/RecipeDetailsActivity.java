@@ -224,6 +224,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements onStepCl
         if (videoUrl != null && !videoUrl.equals("")) {
             setUrlToPlay(videoUrl);
         } else {
+            if(getSupportActionBar()!=null) {
+                getSupportActionBar().hide();
+            }
             showVideoView(false);
         }
         if (description != null && !description.equals("")) {

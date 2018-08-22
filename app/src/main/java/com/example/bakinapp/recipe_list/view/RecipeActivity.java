@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeContract.
     RecipePresenter presenter;
     Context context;
     RecipeAdapter adapter;
+    Boolean isTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,16 @@ public class RecipeActivity extends AppCompatActivity implements RecipeContract.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recipe);
         context = this;
 
+        isTablet = getResources().getBoolean(R.bool.isTablet);
         presenter = new RecipePresenter(this, this);
         adapter = new RecipeAdapter(this, presenter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        binding.rvRecipes.setLayoutManager(linearLayoutManager);
+        if (isTablet) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+            binding.rvRecipes.setLayoutManager(gridLayoutManager);
+        } else {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            binding.rvRecipes.setLayoutManager(linearLayoutManager);
+        }
         binding.rvRecipes.setAdapter(adapter);
         presenter.create();
     }
