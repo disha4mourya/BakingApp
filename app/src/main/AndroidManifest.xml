@@ -6,28 +6,31 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.example.bakinapp.app.BakingApp"
+        android:name=".app.BakingApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.bakinapp.recipe_list.view.RecipeActivity">
+        <activity android:name=".recipe_list.view.RecipeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.bakinapp.recipe_details.view.RecipeDetailsActivity" />
+        <activity android:name=".recipe_details.view.RecipeDetailsActivity" />
         <activity
-            android:name="com.example.bakinapp.step_details.StepDetailsActivity"
+            android:name=".step_details.StepDetailsActivity"
             android:theme="@style/AppThemeNoActionBar" />
 
-        <service android:name="com.example.bakinapp.RecipeAppWidgetService" />
+        <provider
+            android:name=".provider.RecipeContentProvider"
+            android:authorities="com.imerchantech.bakinapp"
+            android:exported="true" />
 
-        <receiver android:name="com.example.bakinapp.RecipeAppWidget">
+        <receiver android:name=".RecipeWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -36,6 +39,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_app_widget_info" />
         </receiver>
+
+        <service android:name=".RecipeService" />
+        <service
+            android:name=".GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".ingredient_list.IngredientListActivity"></activity>
     </application>
 
 </manifest>

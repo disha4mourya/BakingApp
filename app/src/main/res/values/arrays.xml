@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <array name="recipe_types">
+        <item>vine</item>
+        <item>cactus</item>
+        <item>cactus</item>
+        <item>cactus</item>
+        <item>cactus</item>
+        <item>cactus</item>
+        <item>cactus</item>
+    </array>
+</resources>
