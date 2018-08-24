@@ -32,12 +32,13 @@ public class MasterListFragment extends Fragment {
     RecipeEntity recipeEntity = new RecipeEntity();
     onStepClickListener onStepClickListener;
 
-    public MasterListFragment(){
+    public MasterListFragment() {
 
     }
+
     @SuppressLint("ValidFragment")
     public MasterListFragment(onStepClickListener onStepClickListener1) {
-        this.onStepClickListener=onStepClickListener1;
+        this.onStepClickListener = onStepClickListener1;
     }
 
     @Override
@@ -52,6 +53,7 @@ public class MasterListFragment extends Fragment {
         recipeEntity = new Gson().fromJson(getArguments, RecipeEntity.class);
         Log.d("ingreFrag", "size" + recipeEntity.getIngredients().size());
 
+        binding.tvRecipeName.setText(recipeEntity.getName());
         ingredientsAdapter = new DetailsIngredientsAdapter(context, recipeEntity.getIngredients());
         stepsAdapter = new DetailsStepsAdapter(context, recipeEntity.getSteps());
 

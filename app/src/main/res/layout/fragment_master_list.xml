@@ -15,11 +15,20 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/tvRecipeName"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent" />
+
+                <TextView
                     android:id="@+id/tvIngredients"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ingredients"
+                    app:layout_constraintTop_toBottomOf="@id/tvRecipeName"
                     android:textColor="@color/colorAccent" />
+
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvIngredients"
