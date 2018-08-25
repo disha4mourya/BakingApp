@@ -67,7 +67,6 @@ public class IngredientService extends IntentService {
                 null,
                 IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME
         );
-
         String recipeId = "";
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
