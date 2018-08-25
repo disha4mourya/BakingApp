@@ -26,11 +26,11 @@
             android:theme="@style/AppThemeNoActionBar" />
 
         <provider
-            android:name=".provider.RecipeContentProvider"
+            android:name=".provider.IngredientsContentProvider"
             android:authorities="com.imerchantech.bakinapp"
             android:exported="true" />
 
-        <receiver android:name=".RecipeWidgetProvider">
+        <receiver android:name=".IngredientWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -40,7 +40,7 @@
                 android:resource="@xml/recipe_app_widget_info" />
         </receiver>
 
-        <service android:name=".RecipeService" />
+        <service android:name=".IngredientService" />
         <service
             android:name=".GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />

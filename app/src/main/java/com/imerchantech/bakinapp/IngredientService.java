@@ -10,26 +10,26 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.imerchantech.bakinapp.provider.RecipeContract;
+import com.imerchantech.bakinapp.provider.IngredientsContract;
 
+import static com.imerchantech.bakinapp.provider.IngredientsContract.PATH_INGREDIENT;
 import static com.imerchantech.bakinapp.provider.RecipeContract.BASE_CONTENT_URI;
 import static com.imerchantech.bakinapp.provider.RecipeContract.INVALID_RECIPE_ID;
-import static com.imerchantech.bakinapp.provider.RecipeContract.PATH_RECIPE;
 
 
-public class RecipeService extends IntentService {
+public class IngredientService extends IntentService {
 
     public static final String ACTION_SHOW_INGREDIENTS = "com.example.bakinapp.action.show_ingredients";
     public static final String ACTION_UPDATE_RECIPE_WIDGETS = "com.example.bakinapp.action.update_ingredients_widgets";
     public static final String EXTRA_RECIPE_ID = "com.example.bakinapp.extra.RECIPE_ID";
 
-    public RecipeService() {
-        super("RecipeService");
+    public IngredientService() {
+        super("IngredientService");
     }
 
 
     public static void startActionUpdateRecipeWidgets(Context context) {
-        Intent intent = new Intent(context, RecipeService.class);
+        Intent intent = new Intent(context, IngredientService.class);
         intent.setAction(ACTION_UPDATE_RECIPE_WIDGETS);
         context.startService(intent);
     }
@@ -50,40 +50,36 @@ public class RecipeService extends IntentService {
 
 
     private void handleActionShowIngredients(long recipeId) {
-        Uri SINGLE_RECIPE_URI = ContentUris.withAppendedId(
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build(), recipeId);
+
         ContentValues contentValues = new ContentValues();
         long timeNow = System.currentTimeMillis();
-        contentValues.put(RecipeContract.RecipeEntry.COLUMN_INGREDIENT_LIST, timeNow);
+        contentValues.put(IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME, timeNow);
 
         startActionUpdateRecipeWidgets(this);
     }
 
-
-
     private void handleActionUpdateRecipeWidgets() {
-        Uri RECIPE_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
+        Uri RECIPE_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_INGREDIENT).build();
         Cursor cursor = getContentResolver().query(
                 RECIPE_URI,
                 null,
                 null,
                 null,
-                RecipeContract.RecipeEntry.COLUMN_INGREDIENT_LIST
+                IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME
         );
 
-
-        long recipeId = INVALID_RECIPE_ID;
+        String recipeId = "";
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            int idIndex = cursor.getColumnIndex(RecipeContract.RecipeEntry._ID);
+            int idIndex = cursor.getColumnIndex(IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME);
 
-            recipeId = cursor.getLong(idIndex);
+            recipeId = cursor.getString(idIndex);
             cursor.close();
 
         }
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, IngredientWidgetProvider.class));
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
-        RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager,recipeId ,appWidgetIds);
+        IngredientWidgetProvider.updateRecipeWidgets(this, appWidgetManager, recipeId, appWidgetIds);
     }
 }

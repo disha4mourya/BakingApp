@@ -4,15 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.imerchantech.bakinapp.provider.RecipeContract;
-import com.imerchantech.bakinapp.recipe_details.view.RecipeDetailsActivity;
+import com.imerchantech.bakinapp.provider.IngredientsContract;
 
+import static com.imerchantech.bakinapp.provider.IngredientsContract.PATH_INGREDIENT;
 import static com.imerchantech.bakinapp.provider.RecipeContract.BASE_CONTENT_URI;
-import static com.imerchantech.bakinapp.provider.RecipeContract.PATH_RECIPE;
 
 
 public class GridWidgetService extends RemoteViewsService {
@@ -24,8 +22,8 @@ public class GridWidgetService extends RemoteViewsService {
 
 class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    Context mContext;
-    Cursor mCursor;
+    private Context mContext;
+    private Cursor mCursor;
 
     public GridRemoteViewsFactory(Context applicationContext) {
         mContext = applicationContext;
@@ -38,14 +36,14 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-        Uri RECIPE_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
+        Uri RECIPE_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_INGREDIENT).build();
         if (mCursor != null) mCursor.close();
         mCursor = mContext.getContentResolver().query(
                 RECIPE_URI,
                 null,
                 null,
                 null,
-                RecipeContract.RecipeEntry.COLUMN_STEPS_LIST
+                IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME
         );
     }
 
@@ -64,20 +62,11 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public RemoteViews getViewAt(int position) {
         if (mCursor == null || mCursor.getCount() == 0) return null;
         mCursor.moveToPosition(position);
-        int idIndex = mCursor.getColumnIndex(RecipeContract.RecipeEntry._ID);
-        int recipeTypeIndex = mCursor.getColumnIndex(RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME);
-
-        long recipeId = mCursor.getLong(idIndex);
+        int recipeTypeIndex = mCursor.getColumnIndex(IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME);
         String recipeName = mCursor.getString(recipeTypeIndex);
 
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.recipe_widget);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_widget);
         views.setTextViewText(R.id.widget_recipe_name, recipeName);
-
-        Bundle extras = new Bundle();
-        extras.putLong(RecipeDetailsActivity.EXTRA_RECIPE_ID, recipeId);
-        Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-        views.setOnClickFillInIntent(R.id.widget_recipe_name, fillInIntent);
 
         return views;
 

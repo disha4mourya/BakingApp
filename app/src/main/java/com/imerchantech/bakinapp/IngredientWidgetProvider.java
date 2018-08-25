@@ -2,26 +2,19 @@ package com.imerchantech.bakinapp;
 
 
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.imerchantech.bakinapp.ingredient_list.IngredientListActivity;
-import com.imerchantech.bakinapp.provider.RecipeContract;
-import com.imerchantech.bakinapp.recipe_details.view.RecipeDetailsActivity;
-import com.imerchantech.bakinapp.recipe_list.view.RecipeActivity;
-
-public class RecipeWidgetProvider extends AppWidgetProvider {
+public class IngredientWidgetProvider extends AppWidgetProvider {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                 long recipeId,  int appWidgetId) {
+                                 String recipeId,  int appWidgetId) {
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews rv;
@@ -35,34 +28,34 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        RecipeService.startActionUpdateRecipeWidgets(context);
+        IngredientService.startActionUpdateRecipeWidgets(context);
     }
 
 
     public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
-                                           long recipeId, int[] appWidgetIds) {
+                                           String recipeId, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, recipeId,  appWidgetId);
         }
     }
 
-    private static RemoteViews getSingleRecipeRemoteView(Context context,  long recipeId) {
+    private static RemoteViews getSingleRecipeRemoteView(Context context,  String recipeId) {
 
-        Intent intent;
-        if (recipeId == RecipeContract.INVALID_RECIPE_ID) {
+       /* Intent intent;
+        if (recipeId == IngredientsContract.INVALID_INGRE_ID) {
             intent = new Intent(context, RecipeActivity.class);
         } else { // Set on click to open the corresponding detail activity
-            Log.d(RecipeWidgetProvider.class.getSimpleName(), "recipeId=" + recipeId);
+            Log.d(IngredientWidgetProvider.class.getSimpleName(), "recipeId=" + recipeId);
             intent = new Intent(context, IngredientListActivity.class);
             intent.putExtra(RecipeDetailsActivity.EXTRA_RECIPE_ID, recipeId);
         }
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);*/
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredient_widget);
 
 
-        views.setTextViewText(R.id.widget_recipe_name, String.valueOf(recipeId));
+        views.setTextViewText(R.id.widget_recipe_name, recipeId);
 
-        views.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
+        //views.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
 
         return views;
     }
@@ -74,9 +67,9 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, GridWidgetService.class);
         views.setRemoteAdapter(R.id.widget_grid_view, intent);
         // Set the IngredientListActivity intent to launch when clicked
-        Intent appIntent = new Intent(context, IngredientListActivity.class);
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
+       // Intent appIntent = new Intent(context, IngredientListActivity.class);
+        //PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
 
         // Handle empty gardens
         views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);
@@ -87,7 +80,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
                                           int appWidgetId, Bundle newOptions) {
-        RecipeService.startActionUpdateRecipeWidgets(context);
+        IngredientService.startActionUpdateRecipeWidgets(context);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 

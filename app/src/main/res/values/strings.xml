@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BakinApp</string>
     <bool name="isTablet">false</bool>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">INGREDIENT</string>
     <string name="add_widget">Add widget</string>
     <string name="empty_view_text">empty list</string>
 </resources>

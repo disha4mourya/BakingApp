@@ -21,7 +21,6 @@ public class IngredientsContentProvider extends ContentProvider {
     public static final int INGREDIENT_WITH_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final String TAG = RecipeContentProvider.class.getName();
 
     public static UriMatcher buildUriMatcher() {
 
