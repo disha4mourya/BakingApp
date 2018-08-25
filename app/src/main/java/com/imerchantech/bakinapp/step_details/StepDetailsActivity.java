@@ -60,6 +60,7 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
     private long mResumePosition;
     private String RESUME_POSITION = "resumePosition";
     private String RESUME_WINDOW = "resumeWindow";
+    private String SELECTED_POSITION="selectedPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         if (savedInstanceState != null) {
             mResumePosition = savedInstanceState.getLong(RESUME_POSITION);
             mResumeWindow = savedInstanceState.getInt(RESUME_WINDOW);
+            selectedPosition = savedInstanceState.getInt(SELECTED_POSITION);
         }
         setVisibilityOfImageButton();
     }
@@ -157,6 +159,7 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
 
         outState.putLong(RESUME_POSITION, mResumePosition);
         outState.putInt(RESUME_WINDOW, mResumeWindow);
+        outState.putInt(SELECTED_POSITION, selectedPosition);
 
     }
 
