@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.imerchantech.bakinapp"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -39,13 +39,12 @@ dependencies {
     implementation deps.exoPlayer.dash
     implementation deps.exoPlayer.ui
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation deps.test.junit
     androidTestImplementation deps.test.testRunner
     androidTestImplementation deps.support.annotations
     androidTestImplementation deps.test.expressoCore
     androidTestImplementation deps.test.expressoIntent
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
