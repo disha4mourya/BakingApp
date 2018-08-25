@@ -9,7 +9,11 @@
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp" />
+        android:layout_height="400dp"
+        app:fastforward_increment="1000"
+        app:rewind_increment="1000"
+        app:resize_mode="fill"
+        app:controller_layout_id="@layout/exo_playback_control_view"/>
     <TextView
         app:layout_constraintTop_toBottomOf="@+id/video_view"
         android:id="@+id/tvDescriptionDummy"
