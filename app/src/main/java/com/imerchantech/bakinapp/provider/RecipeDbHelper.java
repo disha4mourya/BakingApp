@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.imerchantech.bakinapp.provider.RecipeContract.*;
+import com.imerchantech.bakinapp.provider.IngredientsContract.*;
 
 public class RecipeDbHelper extends SQLiteOpenHelper {
 
@@ -21,11 +22,19 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_RECIPE_TABLE = "CREATE TABLE " + RecipeEntry.TABLE_NAME + " (" +
                 RecipeEntry._ID + " INTEGER PRIMARY KEY," +
-                RecipeEntry.COLUMN_RECIPE_NAME + " INTEGER NOT NULL, " +
+                RecipeEntry.COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
                 RecipeEntry.COLUMN_STEPS_LIST + " TIMESTAMP NOT NULL, " +
                 RecipeEntry.COLUMN_INGREDIENT_LIST + " TIMESTAMP NOT NULL)";
 
         sqLiteDatabase.execSQL(SQL_CREATE_RECIPE_TABLE);
+
+        final String SQL_CREATE_INGREDIENT_TABLE = "CREATE TABLE " + IngredientsEntry.TABLE_NAME + " (" +
+                IngredientsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                IngredientsEntry.COLUMN_INGRE_NAME + " TEXT NOT NULL)";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_INGREDIENT_TABLE);
+
+
     }
 
     @Override

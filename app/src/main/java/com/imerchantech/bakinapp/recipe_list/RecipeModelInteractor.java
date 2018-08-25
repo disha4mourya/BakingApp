@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.imerchantech.bakinapp.RecipeService;
 import com.imerchantech.bakinapp.network.service.recipe.RecipeServiceImpl;
+import com.imerchantech.bakinapp.provider.IngredientsContract;
 import com.imerchantech.bakinapp.provider.RecipeContract;
 import com.imerchantech.bakinapp.provider.RecipeDbHelper;
 import com.imerchantech.bakinapp.recipe_list.entities.AllRecipeEntity;
@@ -66,6 +67,14 @@ public class RecipeModelInteractor implements com.imerchantech.bakinapp.recipe_l
                     contentValues.put(RecipeContract.RecipeEntry.COLUMN_STEPS_LIST, timeNow);
                     contentValues.put(RecipeContract.RecipeEntry.COLUMN_INGREDIENT_LIST, new Gson().toJson(ingredientsEntityList));
                     context.getContentResolver().insert(RecipeContract.RecipeEntry.CONTENT_URI, contentValues);
+                    RecipeService.startActionUpdateRecipeWidgets(context);
+                }
+
+                for (int i = 0; i < recipeEntityList.get(0).getIngredients().size(); i++) {
+                    ContentValues contentValues = new ContentValues();
+
+                    contentValues.put(IngredientsContract.IngredientsEntry.COLUMN_INGRE_NAME, recipeEntityList.get(0).getIngredients().get(i).getIngredient());
+                    context.getContentResolver().insert(IngredientsContract.IngredientsEntry.CONTENT_URI, contentValues);
                     RecipeService.startActionUpdateRecipeWidgets(context);
                 }
 

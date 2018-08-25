@@ -25,4 +25,5 @@ public class RecipeContract {
         public static final String COLUMN_STEPS_LIST = "createdAt";
         public static final String COLUMN_INGREDIENT_LIST = "lastWateredAt";
     }
+
 }
