@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.imerchantech.bakinapp.recipe_list.entities.StepsEntity;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -47,6 +56,10 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
     List<StepsEntity> stepsEntityList;
 
     ImageButton ibPrev, ibNext;
+    private int mResumeWindow;
+    private long mResumePosition;
+    private String RESUME_POSITION = "resumePosition";
+    private String RESUME_WINDOW = "resumeWindow";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +82,10 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         Log.d("stepsListSize", "" + stepsEntityList.size());
         Log.d("selectedPosition", "" + selectedPosition);
 
+        if (savedInstanceState != null) {
+            mResumePosition = savedInstanceState.getLong(RESUME_POSITION);
+            mResumeWindow = savedInstanceState.getInt(RESUME_WINDOW);
+        }
         setVisibilityOfImageButton();
     }
 
@@ -79,24 +96,26 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         // Checking the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //First Hide other objects (listview or recyclerview), better hide them using Gone.
-            ViewGroup.LayoutParams params =  playerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=params.MATCH_PARENT;
+            ViewGroup.LayoutParams params = playerView.getLayoutParams();
+            params.width = params.MATCH_PARENT;
+            params.height = params.MATCH_PARENT;
             playerView.setLayoutParams(params);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             //unhide your objects here.
-            ViewGroup.LayoutParams params =  playerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=600;
+            ViewGroup.LayoutParams params = playerView.getLayoutParams();
+            params.width = params.MATCH_PARENT;
+            params.height = 600;
             playerView.setLayoutParams(params);
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
 
             initializePlayer();
+
         }
     }
 
@@ -110,6 +129,11 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         }
 
         setStepData(selectedPosition);
+
+        Log.d("seekToPosition", "is" + mResumePosition);
+        playerView.getPlayer().seekTo(mResumeWindow, mResumePosition);
+
+
     }
 
     @Override
@@ -118,6 +142,22 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
+        if (playerView != null && playerView.getPlayer() != null) {
+            mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
+            mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+            Log.d("seekToPositionPause", "is" + mResumePosition);
+
+            playerView.getPlayer().release();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(RESUME_POSITION, mResumePosition);
+        outState.putInt(RESUME_WINDOW, mResumeWindow);
+
     }
 
     @Override
@@ -126,6 +166,13 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (playerView.getPlayer() != null)
+            playerView.getPlayer().release();
     }
 
     private void initializePlayer() {
@@ -183,6 +230,8 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         showVideoView(true);
         MediaSource mediaSource = buildMediaSource(Uri.parse(urlToPlay));
         player.prepare(mediaSource, true, false);
+
+
     }
 
     public void showVideoView(Boolean show) {
@@ -215,7 +264,7 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         if (videoUrl != null && !videoUrl.equals("")) {
             setUrlToPlay(videoUrl);
         } else {
-            if(getSupportActionBar()!=null) {
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
             showVideoView(false);
@@ -238,8 +287,8 @@ public class StepDetailsActivity extends AppCompatActivity implements View.OnCli
         else
             ibNext.setVisibility(VISIBLE);
 
-        Log.d("selectedPositionIn",""+selectedPosition);
-        Log.d("sizeList",""+stepsEntityList.size());
+        Log.d("selectedPositionIn", "" + selectedPosition);
+        Log.d("sizeList", "" + stepsEntityList.size());
     }
 
     @Override
